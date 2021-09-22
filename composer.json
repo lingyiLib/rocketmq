@@ -1,0 +1,19 @@
+{
+    "name": "lingyilib/rocketmq",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "illuminate/log": "5.8.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "lingyiLib\\rocketmq\\": "src"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "secure-http": false
+    }
+}
