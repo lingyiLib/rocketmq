@@ -1,8 +1,7 @@
 <?php
 namespace lingyiLib\rocketmq;
 
-use lingyiLib\logger\Logger;
-use lingyiLib\logger\LoggerFactory;
+use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\cache\Cache;
 use lingyiLib\rocketmq\consumer\DefaultMQConsumer;
 use lingyiLib\rocketmq\core\ConcurrentMap;
@@ -21,7 +20,7 @@ use lingyiLib\rocketmq\util\MQClientUtil;
 class MQClientInstance
 {
     /**
-     * @var Logger
+     * @var Log
      */
     private $log;
 
@@ -62,7 +61,7 @@ class MQClientInstance
         // 创建同步阻塞客户端
         $this->namesrvAddr = $namesrvAddr;
         $this->cache = RocketMQConfig::getCache();
-        $this->log = LoggerFactory::getLogger(MQClientInstance::class);
+        $this->log = Log::channel('rocketmq');
         $this->_syncClient = new ConcurrentMap();
         $this->defaultMQProducer = new DefaultMQProducer(MixUtil::$CLIENT_INNER_PRODUCER_GROUP);
     }
@@ -282,7 +281,7 @@ class MQClientInstance
     }
 
     public function getClientId(){
-        return (defined("LOCAL_HOST") ? LOCAL_HOST : "") . "@" . (defined("LOCAL_PORT") ? LOCAL_PORT : "");
+        return (defined("LOCAL_HOST") ? LOCAL_HOST : self::getLocalIp()) . "@" . (defined("LOCAL_PORT") ? LOCAL_PORT : self::getPid());
     }
 
     /**
@@ -299,5 +298,64 @@ class MQClientInstance
     public function setStopped(bool $stopped)
     {
         $this->stopped = $stopped;
+    }
+
+    /**
+     * 获取内网ip
+     * @return string
+     */
+    public static function getLocalIp(){
+        $yac = null;
+        $yacKey = "localIpInfoCache";
+        if(class_exists("Yac")){
+            $yac = new \Yac();
+            $localIpInfo = $yac->get($yacKey);
+            if(!empty($localIpInfo)){
+                $localIpInfoArr = json_decode($localIpInfo , true);
+                if(!empty($localIpInfoArr['ip']) && $localIpInfoArr['timeout'] > time()){
+                    return $localIpInfoArr["ip"];
+                }
+            }
+        }
+
+        $localIp = "";
+        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+            $localIp = "127.0.0.1";
+        }else{
+            $netInfo = swoole_get_local_ip();
+            if(!empty($netInfo)){
+                $localIps = [];
+                foreach ($netInfo as $str){
+                    if(preg_match('/10[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}/', $str)){
+                        $localIps[0] = $localIps[0]??$str;
+                    }elseif(preg_match('/172[.]((1[6-9])|(2\d)|(3[01]))[.]\d{1,3}[.]\d{1,3}/',$str)){
+                        $localIps[1] = $localIps[1]??$str;
+                    }elseif(preg_match('/192[.]168[.]\d{1,3}[.]\d{1,3}/',$str)){
+                        $localIps[2] = $localIps[2] ?? $str;
+                    }else{
+                        $localIps[3] = '127.0.0.1';
+                    }
+                }
+                $localIp = reset($localIps);
+            }
+        }
+
+        if(!empty($localIp)){
+            if(class_exists("Yac")){
+                $localIpInfoArr = [
+                    "ip" => $localIp,
+                    "timeout" => time() + 3600
+                ];
+                $yac->set($yacKey , json_encode($localIpInfoArr));
+            }
+        }
+        return $localIp;
+    }
+
+    public static function getPid(){
+        if (!function_exists('posix_getpid')) {
+            return getmypid();
+        }
+        return posix_getpid();
     }
 }

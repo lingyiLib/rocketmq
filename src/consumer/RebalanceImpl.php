@@ -1,8 +1,6 @@
 <?php
 namespace lingyiLib\rocketmq\consumer;
 
-use lingyiLib\logger\Logger;
-use lingyiLib\logger\LoggerFactory;
 use lingyiLib\rocketmq\consumer\store\ReadOffsetType;
 use lingyiLib\rocketmq\core\ConcurrentMap;
 use lingyiLib\rocketmq\entity\MessageQueue;
@@ -21,7 +19,7 @@ use lingyiLib\rocketmq\util\TimeUtil;
 class RebalanceImpl
 {
     /**
-     * @var Logger
+     * @var Log
      */
     private $log;
     /**
@@ -67,7 +65,7 @@ class RebalanceImpl
     public function __construct(DefaultMQConsumer $defaultMQConsumer)
     {
         $this->defaultMQConsumer = $defaultMQConsumer;
-        $this->log = LoggerFactory::getLogger(RebalanceImpl::class);
+        $this->log = Log::channel('rocketmq');
         $this->processQueueTable = new ConcurrentMap();
     }
 

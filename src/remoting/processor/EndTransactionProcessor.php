@@ -22,7 +22,7 @@ class EndTransactionProcessor implements Processor
      */
     private $cache;
     /**
-     * @var Logger
+     * @var Log
      */
     private $log;
     

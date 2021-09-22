@@ -3,6 +3,10 @@
     "license": "MIT",
     "minimum-stability": "stable",
     "require": {
+        "php": "^7.1.*",
+        "ext-swoole": "4.4.12",
+        "ext-swoole_async": "4.4.12",
+        "ext-yac": "^2.2.*",
         "illuminate/log": "5.8.*"
     },
     "autoload": {
