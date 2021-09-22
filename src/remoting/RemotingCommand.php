@@ -12,7 +12,7 @@ class RemotingCommand extends Column {
      */
     protected static $requestId = null;
     protected $code;
-    protected $language = "JAVA";
+    protected $language = "PHP";
     protected $version = 355;
     protected $opaque;
     protected $flag = 0;
