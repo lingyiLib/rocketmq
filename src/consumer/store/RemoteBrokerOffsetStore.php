@@ -1,12 +1,12 @@
 <?php
 namespace lingyiLib\rocketmq\consumer\store;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\core\AtomicLong;
 use lingyiLib\rocketmq\core\ConcurrentMap;
 use lingyiLib\rocketmq\core\ObjectMap;
 use lingyiLib\rocketmq\entity\MessageQueue;
 use lingyiLib\rocketmq\exception\RocketMQClientException;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\MQAsyncClientInstance;
 use lingyiLib\rocketmq\MQClientApi;
 use lingyiLib\rocketmq\remoting\header\broker\QueryConsumerOffsetRequestHeader;
@@ -48,7 +48,7 @@ class RemoteBrokerOffsetStore implements OffsetStore
         $this->mqClientFactory = $mqClientFactory;
         $this->groupName = $consumerGroup;
         $this->offsetTable = new ConcurrentMap();
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
     }
 
     function load()

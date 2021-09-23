@@ -1,11 +1,11 @@
 <?php
 namespace lingyiLib\rocketmq;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\consumer\DefaultMQConsumer;
 use lingyiLib\rocketmq\consumer\MQConsumerInner;
 use lingyiLib\rocketmq\consumer\PullMessageService;
 use lingyiLib\rocketmq\core\ConcurrentMap;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\remoting\header\broker\UnregisterClientRequestHeader;
 use lingyiLib\rocketmq\remoting\heartbeat\ConsumerData;
 use lingyiLib\rocketmq\remoting\heartbeat\HeartbeatData;
@@ -67,7 +67,7 @@ class MQAsyncClientInstance extends MQClientInstance
     public function __construct($namesrvAddr){
         // 定义clientId
         $this->_clientId = $this->getClientId();
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->_asyncClientTable = new ConcurrentMap();
         parent::__construct($namesrvAddr);
     }

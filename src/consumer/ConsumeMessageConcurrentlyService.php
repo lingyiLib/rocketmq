@@ -1,13 +1,13 @@
 <?php
 namespace lingyiLib\rocketmq\consumer;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\consumer\listener\ConsumeConcurrentlyContext;
 use lingyiLib\rocketmq\consumer\listener\ConsumeConcurrentlyStatus;
 use lingyiLib\rocketmq\consumer\listener\ConsumeReturnType;
 use lingyiLib\rocketmq\entity\MessageConst;
 use lingyiLib\rocketmq\entity\MessageExt;
 use lingyiLib\rocketmq\entity\MessageQueue;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\util\CoroutineUtil;
 use lingyiLib\rocketmq\util\ScheduleTaskUtil;
 use lingyiLib\rocketmq\util\TimeUtil;
@@ -15,7 +15,7 @@ use lingyiLib\rocketmq\util\TimeUtil;
 class ConsumeMessageConcurrentlyService implements ConsumeMessageService
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     /**
@@ -50,7 +50,7 @@ class ConsumeMessageConcurrentlyService implements ConsumeMessageService
      */
     public function __construct(DefaultMQConsumer $defaultMQConsumer, MessageListener $messageListener)
     {
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->defaultMQConsumer = $defaultMQConsumer;
         $this->messageListener = $messageListener;
         $this->consumeMessageQueue = new ConsumeMessageChannel($this->consumeMessageQueueCapacity);

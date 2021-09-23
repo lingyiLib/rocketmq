@@ -1,7 +1,6 @@
 <?php
 namespace lingyiLib\rocketmq\consumer;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\consumer\listener\ConsumeConcurrentlyStatus;
 use lingyiLib\rocketmq\consumer\listener\ConsumeOrderlyContext;
 use lingyiLib\rocketmq\consumer\listener\ConsumeOrderlyStatus;
@@ -10,6 +9,7 @@ use lingyiLib\rocketmq\entity\Message;
 use lingyiLib\rocketmq\entity\MessageConst;
 use lingyiLib\rocketmq\entity\MessageExt;
 use lingyiLib\rocketmq\entity\MessageQueue;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\util\CoroutineUtil;
 use lingyiLib\rocketmq\util\IntegerUtil;
 use lingyiLib\rocketmq\util\MixUtil;
@@ -19,7 +19,7 @@ use lingyiLib\rocketmq\util\TimeUtil;
 class ConsumeMessageOrderlyService implements ConsumeMessageService
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     private static $MAX_TIME_CONSUME_CONTINUOUSLY = 60000;
@@ -56,7 +56,7 @@ class ConsumeMessageOrderlyService implements ConsumeMessageService
      */
     public function __construct(DefaultMQConsumer $defaultMQConsumer, MessageListener $messageListener)
     {
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->defaultMQConsumer = $defaultMQConsumer;
         $this->messageListener = $messageListener;
         $this->consumeMessageQueue = new ConsumeMessageChannel($this->consumeMessageQueueCapacity);

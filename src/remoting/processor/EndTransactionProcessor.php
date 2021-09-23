@@ -1,10 +1,11 @@
 <?php
 namespace lingyiLib\rocketmq\remoting\processor;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\cache\Cache;
+use lingyiLib\rocketmq\core\Channel;
 use lingyiLib\rocketmq\entity\MessageConst;
 use lingyiLib\rocketmq\entity\MessageSysFlag;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\remoting\AbstractRemotingClient;
 use lingyiLib\rocketmq\remoting\ByteBuf;
 use lingyiLib\rocketmq\remoting\callback\InvokeCallback;
@@ -22,14 +23,14 @@ class EndTransactionProcessor implements Processor
      */
     private $cache;
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     
     public function __construct()
     {
         $this->cache = RocketMQConfig::getCache();
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
     }
 
     /**

@@ -1,15 +1,15 @@
 <?php
 namespace lingyiLib\rocketmq\consumer;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\core\Channel;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\MQAsyncClientInstance;
 use lingyiLib\rocketmq\util\CoroutineUtil;
 
 class PullMessageService
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     /**
@@ -30,7 +30,7 @@ class PullMessageService
     public function __construct(MQAsyncClientInstance $mqAsyncClientInstance){
         $this->pullRequestQueue = new Channel(1024);
         $this->mqAsyncClientInstance = $mqAsyncClientInstance;
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         // 启动数据拉取
         $this->run();
     }

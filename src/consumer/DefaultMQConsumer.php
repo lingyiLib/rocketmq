@@ -12,6 +12,7 @@ use lingyiLib\rocketmq\entity\MessageExt;
 use lingyiLib\rocketmq\entity\PullStatus;
 use lingyiLib\rocketmq\entity\ServiceState;
 use lingyiLib\rocketmq\exception\RocketMQClientException;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\MQAsyncClientInstance;
 use lingyiLib\rocketmq\MQClientInstanceFactory;
 use lingyiLib\rocketmq\remoting\header\broker\ConsumerSendMsgBackRequestHeader;
@@ -29,7 +30,7 @@ use lingyiLib\rocketmq\util\TimeUtil;
 class DefaultMQConsumer implements MQConsumerInner
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     /**
@@ -165,7 +166,7 @@ class DefaultMQConsumer implements MQConsumerInner
      */
     public function __construct($consumerGroup)
     {
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->consumerGroup = $consumerGroup;
         $this->rebalanceImpl = new RebalanceImpl($this);
 

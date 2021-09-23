@@ -1,9 +1,9 @@
 <?php
 namespace lingyiLib\rocketmq\remoting;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\core\ResponseFuture;
 use lingyiLib\rocketmq\exception\RocketMQClientException;
+use lingyiLib\rocketmq\logger\Logger;
 
 /**
  * 同步阻塞客户端
@@ -13,14 +13,14 @@ use lingyiLib\rocketmq\exception\RocketMQClientException;
 class RemotingSyncClient extends AbstractRemotingClient
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     protected $addr;
     protected $client = null;
 
     public function __construct($addr){
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->addr = $addr;
         $this->client = SwooleClientFactory::createSyncClient();
     }

@@ -1,5 +1,6 @@
 <?php
 namespace lingyiLib\rocketmq\util;
+
 use lingyiLib\rocketmq\entity\MessageQueue;
 use lingyiLib\rocketmq\entity\PermName;
 use lingyiLib\rocketmq\entity\TopicPublishInfo;

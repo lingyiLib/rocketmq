@@ -1,7 +1,6 @@
 <?php
 namespace lingyiLib\rocketmq;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\cache\Cache;
 use lingyiLib\rocketmq\consumer\DefaultMQConsumer;
 use lingyiLib\rocketmq\core\ConcurrentMap;
@@ -10,6 +9,7 @@ use lingyiLib\rocketmq\entity\MessageQueue;
 use lingyiLib\rocketmq\entity\TopicPublishInfo;
 use lingyiLib\rocketmq\entity\TopicRouteData;
 use lingyiLib\rocketmq\exception\RocketMQClientException;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\remoting\heartbeat\ConsumerData;
 use lingyiLib\rocketmq\remoting\RemotingSyncClient;
 use lingyiLib\rocketmq\remoting\RemotingCommand;
@@ -20,7 +20,7 @@ use lingyiLib\rocketmq\util\MQClientUtil;
 class MQClientInstance
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
 
@@ -61,7 +61,7 @@ class MQClientInstance
         // 创建同步阻塞客户端
         $this->namesrvAddr = $namesrvAddr;
         $this->cache = RocketMQConfig::getCache();
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->_syncClient = new ConcurrentMap();
         $this->defaultMQProducer = new DefaultMQProducer(MixUtil::$CLIENT_INNER_PRODUCER_GROUP);
     }

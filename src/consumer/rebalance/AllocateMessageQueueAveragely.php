@@ -1,19 +1,19 @@
 <?php
 namespace lingyiLib\rocketmq\consumer\rebalance;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\consumer\AllocateMessageQueueStrategy;
+use lingyiLib\rocketmq\logger\Logger;
 
 class AllocateMessageQueueAveragely implements AllocateMessageQueueStrategy
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     
     public function __construct()
     {
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
     }
 
     public function allocate(string $consumerGroup, string $currentCID, $mqAll, $cidAll)

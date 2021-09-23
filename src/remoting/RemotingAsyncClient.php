@@ -1,10 +1,10 @@
 <?php
 namespace lingyiLib\rocketmq\remoting;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\core\ConcurrentMap;
 use lingyiLib\rocketmq\core\ResponseFuture;
 use lingyiLib\rocketmq\exception\RocketMQClientException;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\remoting\processor\Processor;
 use lingyiLib\rocketmq\util\TimeUtil;
 
@@ -16,7 +16,7 @@ use lingyiLib\rocketmq\util\TimeUtil;
 class RemotingAsyncClient extends AbstractRemotingClient implements RemotingClientAsyncListener
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
 
@@ -32,7 +32,7 @@ class RemotingAsyncClient extends AbstractRemotingClient implements RemotingClie
 
     public function __construct($addr){
         $this->responseTable = new ConcurrentMap();
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->linkStatus = ClientLinkStatus::WAIT;
         $this->addr = $addr;
         $this->connect();

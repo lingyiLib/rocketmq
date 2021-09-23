@@ -1,12 +1,12 @@
 <?php
 namespace lingyiLib\rocketmq\producer;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\entity\Message;
 use lingyiLib\rocketmq\entity\MessageConst;
 use lingyiLib\rocketmq\entity\MessageSysFlag;
 use lingyiLib\rocketmq\entity\SendResult;
 use lingyiLib\rocketmq\entity\TransactionSendResult;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\remoting\header\broker\EndTransactionRequestHeader;
 use lingyiLib\rocketmq\remoting\RemotingCommand;
 use lingyiLib\rocketmq\remoting\RequestCode;
@@ -20,7 +20,7 @@ class TransactionMQProducer extends DefaultMQProducer
     private $transactionListener = null;
 
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
 
@@ -32,7 +32,7 @@ class TransactionMQProducer extends DefaultMQProducer
 
     public function __construct($producerGroup)
     {
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         parent::__construct($producerGroup);
     }
 

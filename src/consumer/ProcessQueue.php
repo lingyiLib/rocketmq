@@ -1,19 +1,19 @@
 <?php
 namespace lingyiLib\rocketmq\consumer;
 
-use Illuminate\Support\Facades\Log;
 use lingyiLib\rocketmq\core\AtomicLong;
 use lingyiLib\rocketmq\core\Lock;
 use lingyiLib\rocketmq\core\ReadWriteLock;
 use lingyiLib\rocketmq\core\TreeMap;
 use lingyiLib\rocketmq\entity\MessageConst;
 use lingyiLib\rocketmq\entity\MessageExt;
+use lingyiLib\rocketmq\logger\Logger;
 use lingyiLib\rocketmq\util\TimeUtil;
 
 class ProcessQueue
 {
     /**
-     * @var Log
+     * @var Logger
      */
     private $log;
     private static $REBALANCE_LOCK_MAX_LIVE_TIME = 30000;
@@ -54,7 +54,7 @@ class ProcessQueue
     private $lastLockTimestamp;
 
     public function __construct(){
-        $this->log = Log::channel('rocketmq');
+        $this->log = new Logger();
         $this->msgTreeMap = TreeMap::create();
         $this->consumingMsgOrderlyTreeMap = TreeMap::create();
         $this->lastPullTimestamp = TimeUtil::currentTimeMillis();
