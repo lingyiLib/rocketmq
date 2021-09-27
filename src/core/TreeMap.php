@@ -486,4 +486,12 @@ class TreeMap extends AbstractMap
             return 0;
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmtpy()
+    {
+        return $this->count() == 0;
+    }
 }

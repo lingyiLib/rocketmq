@@ -119,6 +119,9 @@ class MessageDecoder
         $bodyLen = $byteBuf->readInt();
         if($bodyLen > 0){
             $body = $byteBuf->readString($bodyLen);
+            try{
+                $body = gzuncompress($body);
+            }catch (\Exception $e){}
             $messageExt->setBody($body);
         }
 

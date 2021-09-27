@@ -139,7 +139,7 @@ class ProcessQueue
             $this->lockTreeMap->writeLock(2);
             $this->lastConsumeTimestamp = $now;
             try {
-                if (!empty($this->msgTreeMap)) {
+                if (!$this->msgTreeMap->isEmtpy()) {
                     $result = $this->queueOffsetMax + 1;
                     $removedCnt = 0;
                     foreach ($msgs as $msg) {
@@ -151,7 +151,7 @@ class ProcessQueue
                     }
                     $this->msgCount->getAndIncrement($removedCnt);
 
-                    if (!empty($this->msgTreeMap)) {
+                    if (!$this->msgTreeMap->isEmtpy()) {
                         $result = $this->msgTreeMap->firstKey();
                     }
                 }
